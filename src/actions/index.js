@@ -11,3 +11,10 @@ export const deleteProductFromCart = product => {
     payload: product
   };
 };
+
+export const decProductQtyInCart = product => {
+  return {
+    type: 'DEC_PRODUCT_QTY',
+    payload: product
+  };
+};

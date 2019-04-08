@@ -1,34 +1,51 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addProductToCart } from '../actions';
+import { formatMoney } from '../ultilities/ultilities';
 
 class ProductList extends Component {
   renderList() {
     return this.props.products.map(product => {
       return (
-        <div className="item" key={product.name}>
-          <div className="right floated content">
+        <tr key={product.name}>
+          <td>{product.name}</td>
+          <td>{formatMoney(product.price)}</td>
+          <td>
+            {' '}
             <button
               className="ui button primary"
               onClick={() => this.props.addProductToCart(product)}
             >
               Add to Cart
             </button>
-          </div>
-          <div className="content">{product.name}</div>
-          <div className="content">{product.price}</div>
-        </div>
+          </td>
+        </tr>
       );
     });
   }
 
   render() {
-    return <div className="ui divided list">{this.renderList()}</div>;
+    return (
+      <>
+        <h3 className="ui header">Product</h3>
+        <div className="ui segment">
+          <table className="ui red table">
+            <thead>
+              <tr>
+                <th>Product Name</th>
+                <th>Unit Price</th>
+                <th>Add to Cart</th>
+              </tr>
+            </thead>
+            <tbody>{this.renderList()}</tbody>
+          </table>
+        </div>
+      </>
+    );
   }
 }
 
 const mapStateToProps = state => {
-  console.log(state);
   return { products: state.products };
 };
 
