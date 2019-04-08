@@ -37,7 +37,9 @@ const shoppingCartReducer = (selectedProducts = [], action) => {
       ];
     }
   } else if (action.type === 'DELETE_PRODUCT') {
-    return action.payload;
+    return selectedProducts.filter(function(product) {
+      return product.name !== action.payload.name;
+    });
   }
 
   return selectedProducts;
