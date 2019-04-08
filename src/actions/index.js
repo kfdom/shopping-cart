@@ -18,3 +18,9 @@ export const decProductQtyInCart = product => {
     payload: product
   };
 };
+
+export const emptyCart = () => {
+  return {
+    type: 'EMPTY_CART'
+  };
+};

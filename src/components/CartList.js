@@ -1,40 +1,56 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addProductToCart, deleteProductFromCart, decProductQtyInCart } from '../actions';
+import {
+  addProductToCart,
+  deleteProductFromCart,
+  decProductQtyInCart,
+  emptyCart
+} from '../actions';
 import { formatMoney } from '../ultilities/ultilities';
 
 class CartList extends Component {
   renderList() {
-    return this.props.cart.map(product => {
-      product.price = product.unitPrice;
+    if (this.props.cart.length) {
+      return this.props.cart.map(product => {
+        product.price = product.unitPrice;
+        return (
+          <tr key={product.name}>
+            <td>
+              <i
+                style={{ cursor: 'pointer' }}
+                className="close red icon"
+                onClick={() => this.props.deleteProductFromCart(product)}
+              />
+              {product.name}
+            </td>
+            <td style={{ textAlign: 'center' }}>
+              <i
+                style={{ cursor: 'pointer' }}
+                className="minus red icon"
+                onClick={() => this.props.decProductQtyInCart(product)}
+              />
+              <span style={{ marginLeft: '20px', marginRight: '20px' }}>{product.qty}</span>
+              <i
+                style={{ cursor: 'pointer' }}
+                className="plus green icon"
+                onClick={() => this.props.addProductToCart(product)}
+              />
+            </td>
+            <td style={{ textAlign: 'right' }}>{formatMoney(product.unitPrice)}</td>
+            <td style={{ textAlign: 'right' }}>{formatMoney(product.unitPrice * product.qty)}</td>
+          </tr>
+        );
+      });
+    } else {
       return (
-        <tr key={product.name}>
-          <td>
-            <i
-              style={{ cursor: 'pointer' }}
-              className="close red icon"
-              onClick={() => this.props.deleteProductFromCart(product)}
-            />
-            {product.name}
+        <tr>
+          <td colSpan="4" style={{ textAlign: 'center' }}>
+            {' '}
+            The Cart is Empty{' '}
           </td>
-          <td style={{ textAlign: 'center' }}>
-            <i
-              style={{ cursor: 'pointer' }}
-              className="minus red icon"
-              onClick={() => this.props.decProductQtyInCart(product)}
-            />
-            <span style={{ marginLeft: '20px', marginRight: '20px' }}>{product.qty}</span>
-            <i
-              style={{ cursor: 'pointer' }}
-              className="plus green icon"
-              onClick={() => this.props.addProductToCart(product)}
-            />
-          </td>
-          <td style={{ textAlign: 'right' }}>{formatMoney(product.unitPrice)}</td>
-          <td style={{ textAlign: 'right' }}>{formatMoney(product.unitPrice * product.qty)}</td>
         </tr>
       );
-    });
+    }
   }
 
   render() {
@@ -59,7 +75,14 @@ class CartList extends Component {
             <tbody>
               {this.renderList()}
               <tr>
-                <td colSpan="3" style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                <td>
+                  {this.props.cart.length > 0 && (
+                    <button className="ui button negative" onClick={() => this.props.emptyCart()}>
+                      Remove All
+                    </button>
+                  )}
+                </td>
+                <td colSpan="2" style={{ textAlign: 'right', fontWeight: 'bold' }}>
                   Total Price
                 </td>
                 <td style={{ textAlign: 'right', fontWeight: 'bold' }}>
@@ -80,5 +103,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { addProductToCart, deleteProductFromCart, decProductQtyInCart }
+  { addProductToCart, deleteProductFromCart, decProductQtyInCart, emptyCart }
 )(CartList);

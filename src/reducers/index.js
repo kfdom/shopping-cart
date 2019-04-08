@@ -69,6 +69,9 @@ const shoppingCartReducer = (selectedProducts = [], action) => {
     } else {
       return selectedProducts;
     }
+  } else if (action.type === 'EMPTY_CART') {
+    //this payload type is to empty the cart
+    return [];
   }
 
   return selectedProducts;
