@@ -29,4 +29,4 @@ Follow the steps below to install and run the application
 
 ## Authors
 
-* **Dominic Ng** - [PurpleBooth](https://github.com/kfdom)
+* **Dominic Ng** - [kfdom](https://github.com/kfdom)
