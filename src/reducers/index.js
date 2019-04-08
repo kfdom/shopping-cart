@@ -10,8 +10,24 @@ const productsReducer = () => {
   ];
 };
 const shoppingCartReducer = (selectedProducts = [], action) => {
-  //this payload type is for add new product and increase product quantity in the cart
+  let newCartProdcts = [];
+
+  //Prevent Price hack by altering local Storage
+  if (selectedProducts.length === 0) {
+    if (localStorage.getItem('cart-products')) {
+      selectedProducts = JSON.parse(localStorage.getItem('cart-products'));
+
+      let productPrice;
+
+      selectedProducts.forEach((product, index) => {
+        productPrice = productsReducer().find(x => x.name === product.name).price;
+        selectedProducts[index].unitPrice = productPrice;
+      });
+    }
+  }
+
   if (action.type === 'ADD_PRODUCT') {
+    //this payload type is for add new product and increase product quantity in the cart
     if (selectedProducts.some(product => product.name === action.payload.name)) {
       let newSelectedProducts = [];
       selectedProducts.forEach(product => {
@@ -29,17 +45,16 @@ const shoppingCartReducer = (selectedProducts = [], action) => {
           });
         }
       });
-
-      return newSelectedProducts;
+      newCartProdcts = newSelectedProducts;
     } else {
-      return [
+      newCartProdcts = [
         ...selectedProducts,
         { name: action.payload.name, unitPrice: action.payload.price, qty: 1 }
       ];
     }
   } else if (action.type === 'DELETE_PRODUCT') {
     //this payload type is for delete the whole product from the cart
-    return selectedProducts.filter(function(product) {
+    newCartProdcts = selectedProducts.filter(function(product) {
       return product.name !== action.payload.name;
     });
   } else if (action.type === 'DEC_PRODUCT_QTY') {
@@ -65,16 +80,18 @@ const shoppingCartReducer = (selectedProducts = [], action) => {
         }
       });
 
-      return newSelectedProducts;
+      newCartProdcts = newSelectedProducts;
     } else {
-      return selectedProducts;
+      newCartProdcts = selectedProducts;
     }
   } else if (action.type === 'EMPTY_CART') {
     //this payload type is to empty the cart
-    return [];
+    newCartProdcts = [];
+  } else {
+    newCartProdcts = selectedProducts;
   }
-
-  return selectedProducts;
+  localStorage.setItem('cart-products', JSON.stringify(newCartProdcts));
+  return newCartProdcts;
 };
 
 export default combineReducers({
