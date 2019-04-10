@@ -1,6 +1,6 @@
 # Simple Shopping Cart
 
-This shopping cart project was build based on requirements from EzyVet Practical Test version (VR-FrontendTest-v1.1) using ReactJS and Redux
+This shopping cart project was build based on requirements from Vet Radar Practical Test version (VR-FrontendTest-v1.1) using ReactJS and Redux
 
 ## Getting Started
 
