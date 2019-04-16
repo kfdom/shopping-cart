@@ -4,11 +4,23 @@ import {
   addProductToCart,
   deleteProductFromCart,
   decProductQtyInCart,
-  emptyCart
+  emptyCart,
+  loadCartFromLS,
+  updateCartToLS
 } from '../actions';
 import { formatMoney } from '../ultilities/ultilities';
 
 class CartList extends Component {
+  componentDidMount() {
+    this.props.loadCartFromLS(this.props.cart);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.cart !== prevProps.cart) {
+      this.props.updateCartToLS(this.props.cart);
+    }
+  }
+
   renderList() {
     if (this.props.cart.length) {
       return this.props.cart.map(product => {
@@ -103,5 +115,12 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { addProductToCart, deleteProductFromCart, decProductQtyInCart, emptyCart }
+  {
+    addProductToCart,
+    deleteProductFromCart,
+    decProductQtyInCart,
+    emptyCart,
+    loadCartFromLS,
+    updateCartToLS
+  }
 )(CartList);

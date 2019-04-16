@@ -24,3 +24,17 @@ export const emptyCart = () => {
     type: 'EMPTY_CART'
   };
 };
+
+export const loadCartFromLS = cart => {
+  return {
+    type: 'GET_CART_FROM_LS',
+    payload: cart
+  };
+};
+
+export const updateCartToLS = cart => {
+  return {
+    type: 'UPDATE_CART_TO_LS',
+    payload: cart
+  };
+};

@@ -12,17 +12,19 @@ const productsReducer = () => {
 const shoppingCartReducer = (selectedProducts = [], action) => {
   let newCartProdcts = [];
 
-  //Prevent Price hack by altering local Storage
-  if (selectedProducts.length === 0) {
-    if (localStorage.getItem('cart-products')) {
-      selectedProducts = JSON.parse(localStorage.getItem('cart-products'));
-
-      let productPrice;
-
-      selectedProducts.forEach((product, index) => {
-        productPrice = productsReducer().find(x => x.name === product.name).price;
-        selectedProducts[index].unitPrice = productPrice;
-      });
+  if (action.type === 'GET_CART_FROM_LS') {
+    //load cart from local Storage
+    if (selectedProducts.length === 0) {
+      if (localStorage.getItem('cart-products')) {
+        selectedProducts = JSON.parse(localStorage.getItem('cart-products'));
+        let productPrice;
+        //Prevent Price hack by altering local Storage
+        selectedProducts.forEach((product, index) => {
+          productPrice = productsReducer().find(x => x.name === product.name).price;
+          selectedProducts[index].unitPrice = productPrice;
+        });
+        newCartProdcts = selectedProducts;
+      }
     }
   }
 
@@ -90,7 +92,12 @@ const shoppingCartReducer = (selectedProducts = [], action) => {
   } else {
     newCartProdcts = selectedProducts;
   }
-  localStorage.setItem('cart-products', JSON.stringify(newCartProdcts));
+
+  //update cart to local storage
+  if (action.type === 'UPDATE_CART_TO_LS') {
+    newCartProdcts = selectedProducts;
+    localStorage.setItem('cart-products', JSON.stringify(newCartProdcts));
+  }
   return newCartProdcts;
 };
 
